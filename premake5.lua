@@ -12,11 +12,13 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 includes = {}
 includes["GLFW"] = "OpenGL/vendor/GLFW/include"
+includes["Glad"] = "OpenGL/vendor/Glad/include"
 
 -- all dependencies go between the group labels below
 group "Dependencies"
 
 	include "OpenGL/vendor/GLFW"
+	include "OpenGL/vendor/Glad"
 
 -- main project group
 group ""
@@ -36,19 +38,26 @@ group ""
 
 		includedirs {
 			"%{prj.name}/src",
-			"%{includes.GLFW}"
+			"%{includes.GLFW}",
+			"%{includes.Glad}"
 			--"%{prj.name}/vendor/spdlog/include"
 		}
 
 		links {
 			"GLFW",
-			"opengl32.lib"
+			"Glad",
+			"opengl32.lib",
+			"glu32.lib"
 		}
 
 		filter "system:windows"
 			cppdialect "C++17"
 			staticruntime "On"
 			systemversion "latest"
+
+			defines {
+				"GLFW_INCLUDE_NONE"
+			}
 
 		filter "configurations:Debug"
 			defines "E2D_DEBUG"
