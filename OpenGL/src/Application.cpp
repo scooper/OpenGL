@@ -133,6 +133,8 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    glfwSwapInterval(1);
+
     int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     if (status == 0)
     {
@@ -144,35 +146,51 @@ int main(void)
 
     unsigned int vertexArray, vertexBuffer, indexBuffer;
 
+    // vertex array
     GLCall(glGenVertexArrays(1, &vertexArray));
     GLCall(glBindVertexArray(vertexArray));
 
     float positions[]{
-       -0.5f, -0.5f,
-        0.5f, -0.5f,
-        0.5f,  0.5f,
-       -0.5f,  0.5f
+        // vertex    // color
+       -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, // 0
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // 1
+        0.5f,  0.5f, 0.0f, 0.0f, 1.0f, // 2
+       -0.5f,  0.5f, 1.0f, 1.0f, 1.0f  // 3
     };
+
+    // vertices
     GLCall(glGenBuffers(1, &vertexBuffer));
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer));
 
     GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW));
 
+    // positions
     GLCall(glEnableVertexAttribArray(0));
-    GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
+    GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0));
 
+    // colors
+    GLCall(glEnableVertexAttribArray(1));
+    GLCall(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float))));
+
+    // indices
     GLCall(glGenBuffers(1, &indexBuffer));
     GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer));
 
-    unsigned int indices[] = { 0, 1, 2, 2, 3, 0};
+    unsigned int indices[] = { 0, 1, 2, 2, 3, 0 };
     GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW));
 
+    // shaders
     ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
-    //std::cout << source.VertexSource << std::endl;
-
 
     unsigned int program = CreateProgram(source.VertexSource, source.FragmentSource);
     GLCall(glUseProgram(program));
+
+    // unbind as a test for vertex array
+    GLCall(glBindVertexArray(0));
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    GLCall(glUseProgram(0));
+
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -184,14 +202,14 @@ int main(void)
 
         GLCall(glViewport(0, 0, lowest, lowest));
 
-        /* Render here */
+        // bind shaders
         glUseProgram(program);
 
-        // update the uniform color
-        float timeValue = glfwGetTime();
-        float greenValue = sin(timeValue) / 2.0f + 0.5f;
-        int vertexColorLocation = glGetUniformLocation(program, "globalColor");
-        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+        //// update the uniform color
+        //float timeValue = glfwGetTime();
+        //float greenValue = sin(timeValue) / 2.0f + 0.5f;
+        //int vertexColorLocation = glGetUniformLocation(program, "globalColor");
+        //glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
         GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1));
         GLCall(glClear(GL_COLOR_BUFFER_BIT));  
