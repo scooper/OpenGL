@@ -13,12 +13,14 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 includes = {}
 includes["GLFW"] = "OpenGL/vendor/GLFW/include"
 includes["Glad"] = "OpenGL/vendor/Glad/include"
+includes["SOIL"] = "OpenGL/vendor/SOIL/src"
 
 -- all dependencies go between the group labels below
 group "Dependencies"
 
 	include "OpenGL/vendor/GLFW"
 	include "OpenGL/vendor/Glad"
+	include "OpenGL/vendor/SOIL"
 
 -- main project group
 group ""
@@ -39,13 +41,16 @@ group ""
 		includedirs {
 			"%{prj.name}/src",
 			"%{includes.GLFW}",
-			"%{includes.Glad}"
+			"%{includes.Glad}",
+			"%{includes.SOIL}"
+
 			--"%{prj.name}/vendor/spdlog/include"
 		}
 
 		links {
 			"GLFW",
 			"Glad",
+			"SOIL",
 			"opengl32.lib",
 			"glu32.lib"
 		}
