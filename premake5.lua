@@ -13,14 +13,15 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 includes = {}
 includes["GLFW"] = "OpenGL/vendor/GLFW/include"
 includes["Glad"] = "OpenGL/vendor/Glad/include"
-includes["SOIL"] = "OpenGL/vendor/SOIL/src"
+includes["glm"]  = "OpenGL/vendor/glm"
+includes["spdlog"] = "OpenGL/vendor/spdlog/include"
+includes["stbimage"] = "OpenGL/vendor/stbimage"
 
 -- all dependencies go between the group labels below
 group "Dependencies"
 
 	include "OpenGL/vendor/GLFW"
 	include "OpenGL/vendor/Glad"
-	include "OpenGL/vendor/SOIL"
 
 -- main project group
 group ""
@@ -35,22 +36,27 @@ group ""
 
 		files {
 			"%{prj.name}/src/**.h",
-			"%{prj.name}/src/**.cpp"
+			"%{prj.name}/src/**.cpp",
+			"%{prj.name}/vendor/glm/glm/**.hpp",
+			"%{prj.name}/vendor/glm/glm/**.inl",
+			"%{prj.name}/vendor/stbimage/**.cpp",
+			"%{prj.name}/vendor/stbimage/**.h"
+			
 		}
 
 		includedirs {
 			"%{prj.name}/src",
 			"%{includes.GLFW}",
 			"%{includes.Glad}",
-			"%{includes.SOIL}"
-
-			--"%{prj.name}/vendor/spdlog/include"
+			"%{includes.glm}",
+			"%{includes.spdlog}",
+			"%{includes.stbimage}"
+			
 		}
 
 		links {
 			"GLFW",
 			"Glad",
-			"SOIL",
 			"opengl32.lib",
 			"glu32.lib"
 		}
@@ -61,17 +67,18 @@ group ""
 			systemversion "latest"
 
 			defines {
+				"WINDOWS",
 				"GLFW_INCLUDE_NONE"
 			}
 
 		filter "configurations:Debug"
-			defines "E2D_DEBUG"
+			defines "_DEBUG"
 			symbols "On"
 
 		filter "configurations:Release"
-			defines "E2D_RELEASE"
+			defines "_RELEASE"
 			optimize "On"
 
 		filter "configurations:Dist"
-			defines "E2D_DIST"
+			defines "_DIST"
 			optimize "On"

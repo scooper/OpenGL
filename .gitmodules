@@ -1,3 +1,9 @@
 [submodule "OpenGL/vendor/GLFW"]
 	path = OpenGL/vendor/GLFW
 	url = https://github.com/scooper/glfw.git
+[submodule "OpenGL/vendor/glm"]
+	path = OpenGL/vendor/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "OpenGL/vendor/spdlog"]
+	path = OpenGL/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git

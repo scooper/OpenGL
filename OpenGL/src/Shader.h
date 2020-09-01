@@ -1,33 +1,34 @@
 #pragma once
-#include <string>
-#include <unordered_map>
 
-struct ShaderProgramSource
-{
-    std::string VertexSource;
-    std::string FragmentSource;
-};
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+
+// for shader parsing
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <unordered_map>
 
 class Shader
 {
-private:
-    std::string m_Filepath;
-    unsigned int m_RendererID;
-    std::unordered_map<std::string, int> m_UniformLocationCache;
 public:
-    Shader(const std::string& filepath);
+    unsigned int m_Id;
+    
+    Shader(const char* vertexPath, const char* fragmentPath);
     ~Shader();
 
-    void Bind() const;
-    void Unbind() const;
+    void Use();
+    void Reset();
 
-    void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
+    template <typename T>
+    void SetUniform(const std::string& name, T value);
 
 private:
-    ShaderProgramSource ParseShader(const std::string& filepath);
-    unsigned int CompileShader(unsigned int type, const std::string& source);
-    unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
-    int GetUniformLocation(const std::string name);
+    std::unique_ptr<std::stringstream> m_infoStream;
+    std::unordered_map<std::string, unsigned int> m_UniformCache;
 
+    bool checkShader(unsigned int& id);
+    bool checkProgram();
+    unsigned int getUniformLocation(const std::string &name);
 };
-

@@ -1,24 +1,33 @@
 #pragma once
 
-#include "ErrorHandling.h"
 #include <glad/glad.h>
-#include <string>
+#include <glm/glm.hpp>
+#include <stb_image.h>
+
+enum TexLocation
+{
+    Location0, Location1, Location2, Location3, Location4, Location5, Location6,
+    Location7, Location8, Location9, Location10, Location11, Location12, Location13,
+    Location14, Location15,
+    LocationMax = Location15
+};
 
 class Texture
 {
-private:
-    unsigned int m_RendererID;
-    std::string m_Filepath;
-    unsigned char* m_LocalBuffer;
-    int m_Width, m_Height, m_BPP;
-
 public:
-    Texture(const std::string& path);
+    unsigned int m_Id;
+    GLenum m_Target;
+    TexLocation m_Location;
+
+    Texture(GLenum target, const char* filename, bool flip, TexLocation location);
     ~Texture();
 
-    void Bind(unsigned int slot = 0) const;
-    void Unbind() const;
+    static void Bind(GLenum target, unsigned int texture);
+    void Bind() { this->Activate(m_Location); this->Bind(m_Target, m_Id); }
 
-    inline int GetWidth() const { return m_Width; }
-    inline int GetHeight() const { return m_Height; }
+    static void Unbind(GLenum target);
+    void Unbind() { this->Unbind(m_Target); }
+
+    static void Activate(TexLocation location);
 };
+

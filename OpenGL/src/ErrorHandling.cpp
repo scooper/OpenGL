@@ -1,4 +1,6 @@
 #include "ErrorHandling.h"
+#include <sstream>
+#include "Logger.h"
 
 void APIENTRY ErrorMessageCallback(GLenum source,
     GLenum type, GLuint id, GLenum severity, GLsizei length,
@@ -7,12 +9,18 @@ void APIENTRY ErrorMessageCallback(GLenum source,
     // ignore non-significant error/warning codes
     if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
-    std::cout << "Debug message (" << id << "): " << message << std::endl;
+    std::stringstream ss;
+    ss << "OpenGL Debug message (" << id << "): " << message;
 
     // break on error
-    if (type == GL_DEBUG_TYPE_ERROR)
+    switch (type)
     {
+    case GL_DEBUG_TYPE_ERROR:
+        LOG_ERROR(ss.str());
         ASSERT(false);
+        break;
+    default:
+        LOG_INFO(ss.str());
     }
 }
 
