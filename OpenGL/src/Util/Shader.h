@@ -19,7 +19,7 @@ public:
     ~Shader();
 
     void Use();
-    void Reset();
+    static void Reset();
 
     template <typename T>
     void SetUniform(const std::string& name, T value);

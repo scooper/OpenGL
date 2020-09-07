@@ -3,74 +3,44 @@
 #include <string>
 #include <sstream>
 
-
+#include <imgui.h>
+#include <examples/imgui_impl_glfw.h>
+#include <examples/imgui_impl_opengl3.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Logger.h"
-#include "ErrorHandling.h"
-#include "Shader.h"
-#include "Texture.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "Util/Logger.h"
+#include "Util/ErrorHandling.h"
 
-#include <stb_image.h>
-
-const unsigned int HEIGHT = 600;
-const unsigned int WIDTH = 800;
-
-float lastX = WIDTH/2, lastY = HEIGHT/2;
-bool firstMouse = true;
-float yaw = -90;
-float pitch = 0;
+#include "Layers/Layer.h"
+#include "Layers/Layers.h"
+#include "Layers/Implementation/TestLayer.h"
+#include "Layers/Implementation/GettingStartedLayer.h"
 
 // to keep track of frame time
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-// init projection
-glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-
+Layers layers;
 
 void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
-    projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+    Layer* activeLayer = layers.GetActiveLayer();
+    if (activeLayer)
+        activeLayer->OnWindowResize(width, height);
     glViewport(0, 0, width, height);
-}
-
-void ProcessInput(GLFWwindow* window)
-{
-    const float cameraSpeed = 2.5f * deltaTime;
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        cameraPos += cameraSpeed * cameraFront;
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        cameraPos -= cameraSpeed * cameraFront;
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-    }
 }
 
 void MouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
-    if (firstMouse)
+    Layer* activeLayer = layers.GetActiveLayer();
+    if (activeLayer)
+        activeLayer->OnMouseEvent(xpos, ypos);
+
+    /*if (firstMouse)
     {
         lastX = xpos;
         lastY = ypos;
@@ -98,10 +68,18 @@ void MouseCallback(GLFWwindow* window, double xpos, double ypos)
     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     direction.y = sin(glm::radians(pitch));
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(direction);
+    cameraFront = glm::normalize(direction);*/
 }
 
-GLFWwindow* OpenGLInit()
+// NOTE: this isnt really an amazing idea if you want game-like controls, doesn't really work
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    Layer* activeLayer = layers.GetActiveLayer();
+    if (activeLayer)
+        activeLayer->OnKeyEvent(key, scancode, action, mods);
+}
+
+GLFWwindow* OpenGLInit(int width, int height)
 {
 
     GLFWwindow* window;
@@ -116,11 +94,13 @@ GLFWwindow* OpenGLInit()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     // request debug context (should be some sort of debug/release defines to sort this
+#ifdef _DEBUG
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif
 
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(WIDTH, HEIGHT, "OpenGL", NULL, NULL);
+    window = glfwCreateWindow(width, height, "OpenGL", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -132,6 +112,7 @@ GLFWwindow* OpenGLInit()
 
     glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
     glfwSetCursorPosCallback(window, MouseCallback);
+    glfwSetKeyCallback(window, KeyCallback);
 
     glfwSwapInterval(1);
 
@@ -158,6 +139,27 @@ GLFWwindow* OpenGLInit()
     return window;
 }
 
+void ImGuiInit(GLFWwindow* window)
+{
+    // IMGUI VERSION SETUP
+    // --------------------------------------------------
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+
+    // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 430");
+
+    return;
+}
 
 int main(void)
 {
@@ -165,179 +167,75 @@ int main(void)
     Logger::Init();
     int width = 800;
     int height = 600;
+   
 
-    GLFWwindow* window = OpenGLInit();
+    GLFWwindow* window = OpenGLInit(800, 600);
 
     if (window == nullptr)
     {
         return -1;
     }
     
-    // ------ BEGIN OPENGL CONTENT ---------
+    ImGuiInit(window);
 
-    // create shader
-    Shader shader("D:/Projects/OpenGL/OpenGL/res/shaders/VertexShader.glsl", "D:/Projects/OpenGL/OpenGL/res/shaders/FragmentShader.glsl");
+    layers.Add(new TestLayer(window));
+    layers.Add(new GettingStartedLayer(window));
+    //layers.SetActiveLayer(*layers.begin());
 
-    //
-    /*float vertices[]{
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
-    };*/
-
-    //float vertices[] = {
-    //     // colours          // texture coords
-    //     0.5f,  0.5f, 0.0f,  1.0f, 1.0f,  // top right
-    //     0.5f, -0.5f, 0.0f,  1.0f, 0.0f,  // bottom right
-    //    -0.5f, -0.5f, 0.0f,  0.0f, 0.0f,  // bottom left
-    //    -0.5f,  0.5f, 0.0f,  0.0f, 1.0f   // top left 
-    //};
-
-    float vertices[] = {
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
-    
-    glm::vec3 cubePositions[] = {
-        glm::vec3(0.0f,  0.0f,  0.0f),
-        glm::vec3(2.0f,  5.0f, -15.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
-        glm::vec3(-3.8f, -2.0f, -12.3f),
-        glm::vec3(2.4f, -0.4f, -3.5f),
-        glm::vec3(-1.7f,  3.0f, -7.5f),
-        glm::vec3(1.3f, -2.0f, -2.5f),
-        glm::vec3(1.5f,  2.0f, -2.5f),
-        glm::vec3(1.5f,  0.2f, -1.5f),
-        glm::vec3(-1.3f,  1.0f, -1.5f)
-    };
-
-    //unsigned int indices[] = {  // note that we start from 0!
-    //    0, 1, 3,   // first triangle
-    //    1, 2, 3    // second triangle
-    //};
-
-    Texture texture1(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/test_textures/wall.jpg", true, TexLocation::Location0);
-    Texture texture2(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/test_textures/awesomeface.png", true, TexLocation::Location1);
-
-    unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    //glGenBuffers(1, &EBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    //// create a transform which rotates by 90 degrees on the z axis and scales down by 0.5
-    //glm::mat4 trans = glm::mat4(1.0f);
-    //trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-    //trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-
-    /*glm::mat4 view = glm::mat4(1.0f);
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));*/
-
-
-    float mix = 0.0f;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        /* Poll for and process events */
+        glfwPollEvents();
+
+
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        ProcessInput(window);
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
-        glEnable(GL_DEPTH_TEST);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        texture1.Bind();
-        texture2.Bind();
-
-        glm::mat4 view;
-        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-
-        // use shader
-        shader.Use();
-
-        glBindVertexArray(VAO);
-
-        // gen cubes
-        for (unsigned int i = 0; i < 10; i++)
+        auto activeLayer = layers.GetActiveLayer();
+        if (activeLayer != nullptr)
         {
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, cubePositions[i]);
-            float angle = 20.0f * i;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            // calculate model view projection matrix to pass to shader
-            glm::mat4 mvp = projection * view * model;
-            
-            shader.SetUniform<glm::mat4&>("mvp", mvp);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+            float color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+            activeLayer->Update(deltaTime);
+            ImGui::Begin(activeLayer->m_LayerName.c_str());
+            activeLayer->ImGuiDisplay();
+            //test
+            //          
+            if (ImGui::Button("Back To Menu"))
+                layers.SetActiveLayer(nullptr);
+            ImGui::End();
         }
-      
-        shader.SetUniform("texture1", (int)texture1.m_Location);
-        shader.SetUniform("texture2", (int)texture2.m_Location);
-        shader.SetUniform("mixValue", mix); 
-
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
-        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
-
+        else
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            ImGui::Begin("Menu");
+            //  imgui menu
+            for (Layer* layer : layers)
+            {
+                if (ImGui::Button(layer->m_LayerName.c_str()))
+                    layers.SetActiveLayer(layer);
+            }
+            ImGui::End();
+        }
         
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+       
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
-
-        /* Poll for and process events */
-        glfwPollEvents();
     }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 
     glfwDestroyWindow(window);
     

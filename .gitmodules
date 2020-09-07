@@ -7,3 +7,6 @@
 [submodule "OpenGL/vendor/spdlog"]
 	path = OpenGL/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "OpenGL/vendor/imgui"]
+	path = OpenGL/vendor/imgui
+	url = https://github.com/scooper/imgui.git

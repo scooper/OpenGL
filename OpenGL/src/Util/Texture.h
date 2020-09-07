@@ -22,8 +22,8 @@ public:
     Texture(GLenum target, const char* filename, bool flip, TexLocation location);
     ~Texture();
 
-    static void Bind(GLenum target, unsigned int texture);
-    void Bind() { this->Activate(m_Location); this->Bind(m_Target, m_Id); }
+    static void Bind(GLenum target, unsigned int texture, TexLocation location);
+    void Bind() { this->Activate(m_Location); this->Bind(m_Target, m_Id, m_Location); }
 
     static void Unbind(GLenum target);
     void Unbind() { this->Unbind(m_Target); }

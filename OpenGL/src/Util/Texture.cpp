@@ -51,17 +51,18 @@ Texture::Texture(GLenum target, const char* filename, bool flip, TexLocation loc
         LOG_ERROR("Failed to load texture");
     }
 
+    Unbind();
     stbi_image_free(data);
 }
 
 Texture::~Texture()
 {
-    Unbind();
-    glDeleteTextures(m_Target, &m_Id);
+    glDeleteTextures(1, &m_Id);
 }
 
-void Texture::Bind(GLenum target, unsigned int texture)
+void Texture::Bind(GLenum target, unsigned int texture, TexLocation location)
 {
+    Activate(location);
     glBindTexture(target, texture);
 }
 

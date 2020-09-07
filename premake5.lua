@@ -13,6 +13,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 includes = {}
 includes["GLFW"] = "OpenGL/vendor/GLFW/include"
 includes["Glad"] = "OpenGL/vendor/Glad/include"
+includes["ImGui"] = "OpenGL/vendor/imgui"
 includes["glm"]  = "OpenGL/vendor/glm"
 includes["spdlog"] = "OpenGL/vendor/spdlog/include"
 includes["stbimage"] = "OpenGL/vendor/stbimage"
@@ -22,6 +23,7 @@ group "Dependencies"
 
 	include "OpenGL/vendor/GLFW"
 	include "OpenGL/vendor/Glad"
+	include "OpenGL/vendor/imgui"
 
 -- main project group
 group ""
@@ -40,7 +42,11 @@ group ""
 			"%{prj.name}/vendor/glm/glm/**.hpp",
 			"%{prj.name}/vendor/glm/glm/**.inl",
 			"%{prj.name}/vendor/stbimage/**.cpp",
-			"%{prj.name}/vendor/stbimage/**.h"
+			"%{prj.name}/vendor/stbimage/**.h",
+			"%{prj.name}/vendor/imgui/examples/imgui_impl_opengl3.h",
+			"%{prj.name}/vendor/imgui/examples/imgui_impl_opengl3.cpp",
+			"%{prj.name}/vendor/imgui/examples/imgui_impl_glfw.h",
+			"%{prj.name}/vendor/imgui/examples/imgui_impl_glfw.cpp"
 			
 		}
 
@@ -48,6 +54,7 @@ group ""
 			"%{prj.name}/src",
 			"%{includes.GLFW}",
 			"%{includes.Glad}",
+			"%{includes.ImGui}",
 			"%{includes.glm}",
 			"%{includes.spdlog}",
 			"%{includes.stbimage}"
@@ -57,6 +64,7 @@ group ""
 		links {
 			"GLFW",
 			"Glad",
+			"ImGui",
 			"opengl32.lib",
 			"glu32.lib"
 		}
