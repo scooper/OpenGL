@@ -5,6 +5,7 @@
 #include "Layers/Layer.h"
 #include "Util/Shader.h"
 #include "Util/Texture.h"
+#include "Util/Camera/FlyCamera.h"
 
 class GettingStartedLayer : public Layer
 {
@@ -18,6 +19,7 @@ public:
     void ImGuiDisplay() override;
 
     void OnWindowResize(int width, int height) override;
+    void OnMouseEvent(double xpos, double ypos) override;
     void ProcessKeyEvent() override;
 
 private:
@@ -25,11 +27,12 @@ private:
     Texture* m_Texture1 = nullptr;
     Texture* m_Texture2 = nullptr;
 
-    glm::vec3 m_CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 m_CameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 m_CameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+    FlyCamera* m_Camera = nullptr;
+    
+    // last mouse positions
+    float m_LastX, m_LastY;
 
-    glm::mat4 m_Projection;
+    bool m_MouseMode = false;
 
     unsigned int m_VAO;
 };

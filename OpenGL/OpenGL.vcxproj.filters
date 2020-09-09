@@ -1293,6 +1293,8 @@
     <ClInclude Include="src\Layers\Layers.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Util\Camera\FlyCamera.h" />
+    <ClInclude Include="src\Layers\Implementation\LightingTutorialLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -1328,5 +1330,7 @@
     <ClCompile Include="src\Layers\Implementation\TestLayer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Util\Camera\FlyCamera.cpp" />
+    <ClCompile Include="src\Layers\Implementation\LightingTutorialLayer.cpp" />
   </ItemGroup>
 </Project>

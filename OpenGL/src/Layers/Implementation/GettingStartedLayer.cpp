@@ -81,7 +81,11 @@ void GettingStartedLayer::OnActivate()
     int width, height;
 
     glfwGetWindowSize(m_Window, &width, &height);
-    m_Projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+    //m_Projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+    m_Camera = new FlyCamera(ProjectionParameters{width, height, CameraProjection::PERSPECTIVE});
+
+    m_LastX = width / 2;
+    m_LastY = height / 2;
 
     unsigned int VBO;
 
@@ -105,6 +109,7 @@ void GettingStartedLayer::OnDeactivate()
     logss << "Unload layer: " << m_LayerName;
     LOG_INFO(logss.str());
 
+    // free opengl resources - so other layers can use them
     delete m_Shader;
     delete m_Texture1;
     delete m_Texture2;
@@ -112,13 +117,18 @@ void GettingStartedLayer::OnDeactivate()
 
     Shader::Reset();
     glBindVertexArray(0);
+
+    delete m_Camera;
 }
 
 void GettingStartedLayer::Update(float deltaTime)
 {
+    // keep track of deltatime
     m_DeltaTime = deltaTime;
 
-    ProcessKeyEvent();
+    // dont process keys if window is focused, we may need them for text input
+    if(!ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
+        ProcessKeyEvent();
 
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -126,8 +136,8 @@ void GettingStartedLayer::Update(float deltaTime)
     m_Texture1->Bind();
     m_Texture2->Bind();
 
-    glm::mat4 view;
-    view = glm::lookAt(m_CameraPos, m_CameraPos + m_CameraFront, m_CameraUp);
+    /*glm::mat4 view;
+    view = glm::lookAt(m_CameraPos, m_CameraPos + m_CameraFront, m_CameraUp);*/
 
     // use shader
     m_Shader->Use();
@@ -146,7 +156,7 @@ void GettingStartedLayer::Update(float deltaTime)
         float angle = 20.0f * i;
         model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
         // calculate model view projection matrix to pass to shader
-        glm::mat4 mvp = m_Projection * view * model;
+        glm::mat4 mvp = m_Camera->GetViewProjectionMatrix() * model;
         
         m_Shader->SetUniform<glm::mat4&>("mvp", mvp);
         glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -157,33 +167,55 @@ void GettingStartedLayer::Update(float deltaTime)
 
 void GettingStartedLayer::ImGuiDisplay()
 {
-    
+    ImGui::Text("The learnopengl.com Getting Started tutorial, converted to my Layer format.\n");
+    ImGui::Text("Press 'M' to use mouse controls for the camera and 'Esc' to exit");
+    ImGui::SliderFloat("Camera Speed", &m_Camera->m_Speed, 2.0f, 50.0f, "%.1f");
+    ImGui::SliderFloat("Camera Sensitivity", &m_Camera->m_Sensitivity, 0.1f, 1.0f, "%.2f");
 }
 
 void GettingStartedLayer::OnWindowResize(int width, int height)
 {
-    m_Projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+    m_Camera->UpdateProjectionMatrix(width, height);
+    //m_Projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+}
+
+void GettingStartedLayer::OnMouseEvent(double xpos, double ypos)
+{
+    if (m_MouseMode)
+    {
+        float xoffset = xpos - m_LastX;
+        float yoffset = m_LastY - ypos; // reversed since y-coordinates go from bottom to top
+
+        m_Camera->MouseInput(xoffset, yoffset);
+    }
+
+    m_LastX = xpos;
+    m_LastY = ypos;
 }
 
 
 void GettingStartedLayer::ProcessKeyEvent()
 {
-    const float cameraSpeed = 2.5f * m_DeltaTime;
+    // mouse mode on or off
+    if (glfwGetKey(m_Window, GLFW_KEY_M) == GLFW_PRESS)
+    {
+        m_MouseMode = true;
+        glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+
+    if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        m_MouseMode = false;
+        glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
 
     if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        m_CameraPos += cameraSpeed * m_CameraFront;
-    }
+        m_Camera->KeyInput(TranslateDirection::FORWARDS, m_DeltaTime);
     if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        m_CameraPos -= cameraSpeed * m_CameraFront;
-    }
+        m_Camera->KeyInput(TranslateDirection::BACKWARDS, m_DeltaTime);
     if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        m_CameraPos -= glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * cameraSpeed;
-    }
+        m_Camera->KeyInput(TranslateDirection::LEFT, m_DeltaTime);
     if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        m_CameraPos += glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * cameraSpeed;
-    }
+        m_Camera->KeyInput(TranslateDirection::RIGHT, m_DeltaTime);
+
 }

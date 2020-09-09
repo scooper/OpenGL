@@ -93,6 +93,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Layers\Implementation\LightingTutorialLayer.h" />
+    <ClInclude Include="src\Util\Camera\FlyCamera.h" />
     <ClInclude Include="src\Util\ErrorHandling.h" />
     <ClInclude Include="src\Layers\Implementation\GettingStartedLayer.h" />
     <ClInclude Include="src\Layers\Layer.h" />
@@ -515,6 +517,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Layers\Implementation\LightingTutorialLayer.cpp" />
+    <ClCompile Include="src\Util\Camera\FlyCamera.cpp" />
     <ClCompile Include="src\Util\ErrorHandling.cpp" />
     <ClCompile Include="src\Layers\Implementation\GettingStartedLayer.cpp" />
     <ClCompile Include="src\Layers\Layers.cpp" />
