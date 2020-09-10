@@ -541,6 +541,18 @@
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\GettingStarted\FragmentShader.glsl" />
+    <None Include="res\GettingStarted\VertexShader.glsl" />
+    <None Include="res\LightingTutorial\FragmentShader.glsl" />
+    <None Include="res\LightingTutorial\LightSourceFragmentShader.glsl" />
+    <None Include="res\LightingTutorial\LightSourceVertexShader.glsl" />
+    <None Include="res\LightingTutorial\VertexShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\GettingStarted\awesomeface.png" />
+    <Image Include="res\GettingStarted\wall.jpg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -18,7 +18,7 @@ void TestLayer::OnActivate()
     std::stringstream logss;
     logss << "Loaded layer: " << m_LayerName;
     LOG_INFO(logss.str());
-    m_Shader = new Shader("D:/Projects/OpenGL/OpenGL/res/shaders/VertexShader.glsl", "D:/Projects/OpenGL/OpenGL/res/shaders/FragmentShader.glsl");
+    m_Shader = new Shader("D:/Projects/OpenGL/OpenGL/res/GettingStarted/VertexShader.glsl", "D:/Projects/OpenGL/OpenGL/res/GettingStarted/FragmentShader.glsl");
     
     // do stuff when it's added to the list of layers
     // e.g init camera/matrices(mvp)/load shader/etc

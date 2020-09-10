@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Layers/Layer.h"
+#include "Util/Shader.h"
+#include "Util/Camera/FlyCamera.h"
 
 class LightingTutorialLayer : public Layer
 {
 public:
-    LightingTutorialLayer();
+    LightingTutorialLayer(GLFWwindow* window);
     ~LightingTutorialLayer();
 
     void OnActivate() override;
@@ -18,4 +20,20 @@ public:
     void ProcessKeyEvent() override;
 
 private:
+    unsigned int m_LightSourceVAO;
+    unsigned int m_BoxVAO;
+
+    float m_LastX, m_LastY;
+
+    bool m_MouseMode = false;
+
+    glm::vec3 m_LightPos = glm::vec3(1.2f, 1.0f, 2.0f);
+
+    Shader* m_ObjectShader;
+    Shader* m_LightSourceShader;
+
+    FlyCamera* m_Camera;
+
+    static float m_Vertices[];
+
 };

@@ -74,9 +74,9 @@ void GettingStartedLayer::OnActivate()
     logss << "Loaded layer: " << m_LayerName;
     LOG_INFO(logss.str());
 
-    m_Shader = new Shader("D:/Projects/OpenGL/OpenGL/res/shaders/VertexShader.glsl", "D:/Projects/OpenGL/OpenGL/res/shaders/FragmentShader.glsl");
-    m_Texture1 = new Texture(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/test_textures/wall.jpg", true, TexLocation::Location0);
-    m_Texture2 = new Texture(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/test_textures/awesomeface.png", true, TexLocation::Location1);
+    m_Shader = new Shader("D:/Projects/OpenGL/OpenGL/res/GettingStarted/VertexShader.glsl", "D:/Projects/OpenGL/OpenGL/res/GettingStarted/FragmentShader.glsl");
+    m_Texture1 = new Texture(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/GettingStarted/wall.jpg", true, TexLocation::Location0);
+    m_Texture2 = new Texture(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/GettingStarted/awesomeface.png", true, TexLocation::Location1);
 
     int width, height;
 
@@ -105,10 +105,6 @@ void GettingStartedLayer::OnActivate()
 
 void GettingStartedLayer::OnDeactivate()
 {
-    std::stringstream logss;
-    logss << "Unload layer: " << m_LayerName;
-    LOG_INFO(logss.str());
-
     // free opengl resources - so other layers can use them
     delete m_Shader;
     delete m_Texture1;
@@ -168,7 +164,7 @@ void GettingStartedLayer::Update(float deltaTime)
 void GettingStartedLayer::ImGuiDisplay()
 {
     ImGui::Text("The learnopengl.com Getting Started tutorial, converted to my Layer format.\n");
-    ImGui::Text("Press 'M' to use mouse controls for the camera and 'Esc' to exit");
+    ImGui::Text("Press 'M' to use mouse controls for the camera and 'Esc' to exit mouse controls");
     ImGui::SliderFloat("Camera Speed", &m_Camera->m_Speed, 2.0f, 50.0f, "%.1f");
     ImGui::SliderFloat("Camera Sensitivity", &m_Camera->m_Sensitivity, 0.1f, 1.0f, "%.2f");
 }

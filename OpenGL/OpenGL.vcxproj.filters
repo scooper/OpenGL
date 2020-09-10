@@ -1333,4 +1333,16 @@
     <ClCompile Include="src\Util\Camera\FlyCamera.cpp" />
     <ClCompile Include="src\Layers\Implementation\LightingTutorialLayer.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\GettingStarted\VertexShader.glsl" />
+    <None Include="res\GettingStarted\FragmentShader.glsl" />
+    <None Include="res\LightingTutorial\FragmentShader.glsl" />
+    <None Include="res\LightingTutorial\VertexShader.glsl" />
+    <None Include="res\LightingTutorial\LightSourceFragmentShader.glsl" />
+    <None Include="res\LightingTutorial\LightSourceVertexShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\GettingStarted\awesomeface.png" />
+    <Image Include="res\GettingStarted\wall.jpg" />
+  </ItemGroup>
 </Project>
