@@ -2,6 +2,7 @@
 
 #include "Layers/Layer.h"
 #include "Util/Shader.h"
+#include "Util/Texture.h"
 #include "Util/Camera/FlyCamera.h"
 
 class LightingTutorialLayer : public Layer
@@ -31,6 +32,8 @@ private:
 
     Shader* m_ObjectShader;
     Shader* m_LightSourceShader;
+    Texture* m_BoxDiffuse;
+    Texture* m_BoxSpecular;
 
     FlyCamera* m_Camera;
 

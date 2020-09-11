@@ -81,7 +81,7 @@ void GettingStartedLayer::OnActivate()
     int width, height;
 
     glfwGetWindowSize(m_Window, &width, &height);
-    //m_Projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+
     m_Camera = new FlyCamera(ProjectionParameters{width, height, CameraProjection::PERSPECTIVE});
 
     m_LastX = width / 2;
@@ -132,9 +132,6 @@ void GettingStartedLayer::Update(float deltaTime)
     m_Texture1->Bind();
     m_Texture2->Bind();
 
-    /*glm::mat4 view;
-    view = glm::lookAt(m_CameraPos, m_CameraPos + m_CameraFront, m_CameraUp);*/
-
     // use shader
     m_Shader->Use();
 
@@ -172,7 +169,6 @@ void GettingStartedLayer::ImGuiDisplay()
 void GettingStartedLayer::OnWindowResize(int width, int height)
 {
     m_Camera->UpdateProjectionMatrix(width, height);
-    //m_Projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 }
 
 void GettingStartedLayer::OnMouseEvent(double xpos, double ypos)
