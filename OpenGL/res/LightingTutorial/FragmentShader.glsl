@@ -14,6 +14,10 @@ struct Light
 	vec3 Ambient;
 	vec3 Diffuse;
 	vec3 Specular;
+
+	float Constant;
+	float Linear;
+	float Quadratic;
 };
 
 uniform Material material;
@@ -45,7 +49,14 @@ void main()
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.Shininess);
 	vec3 specular =  light.Specular * spec * vec3(texture(material.Specular, TexCoords));
 
+	float dist = length(light.Position - FragPos);
+	float attenuation = 1.0 / (light.Constant + light.Linear + dist + light.Quadratic + (dist * dist));
+
 	// result
+	ambient *= attenuation;
+	diffuse *= attenuation;
+	specular *= attenuation;
+
 
 	FragColour = vec4(ambient + diffuse + specular, 1.0);
 }

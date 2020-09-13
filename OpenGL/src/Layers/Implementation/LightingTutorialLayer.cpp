@@ -103,11 +103,15 @@ void LightingTutorialLayer::OnActivate()
     // set material for cube
     m_ObjectShader->SetUniform("material.Diffuse", (int)m_BoxDiffuse->m_Location);
     m_ObjectShader->SetUniform("material.Specular", (int)m_BoxSpecular->m_Location);
-    m_ObjectShader->SetUniform("material.Shininess", 32.0f);
+    m_ObjectShader->SetUniform("material.Shininess", 31.0f);
 
     m_ObjectShader->SetUniform("light.Ambient", glm::vec3(0.2f, 0.2f, 0.2f));
     m_ObjectShader->SetUniform("light.Diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
     m_ObjectShader->SetUniform("light.Specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
+    m_ObjectShader->SetUniform("light.Constant", 1.0f);
+    m_ObjectShader->SetUniform("light.Linear", 0.09f);
+    m_ObjectShader->SetUniform("light.Quadratic", 0.032f);
 }
 
 void LightingTutorialLayer::OnDeactivate()
