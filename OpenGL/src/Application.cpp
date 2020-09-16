@@ -9,6 +9,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <assimp/Importer.hpp>
 
 #include "Util/Logger.h"
 #include "Util/ErrorHandling.h"
@@ -28,7 +29,7 @@ Layers layers;
 void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
     // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
+    // height will be significantly larger than specified on retina displays
     Layer* activeLayer = layers.GetActiveLayer();
     if (activeLayer)
         activeLayer->OnWindowResize(width, height);
@@ -40,36 +41,6 @@ void MouseCallback(GLFWwindow* window, double xpos, double ypos)
     Layer* activeLayer = layers.GetActiveLayer();
     if (activeLayer)
         activeLayer->OnMouseEvent(xpos, ypos);
-
-    /*if (firstMouse)
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
-    lastX = xpos;
-    lastY = ypos;
-
-    float sensitivity = 0.1f;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    yaw += xoffset;
-    pitch += yoffset;
-
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
-    glm::vec3 direction;
-    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    direction.y = sin(glm::radians(pitch));
-    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(direction);*/
 }
 
 // NOTE: this isnt really an amazing idea if you want game-like controls, doesn't really work
@@ -82,6 +53,8 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 
 GLFWwindow* OpenGLInit(int width, int height)
 {
+
+    Assimp::Importer importer;
 
     GLFWwindow* window;
 

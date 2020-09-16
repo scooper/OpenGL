@@ -10,3 +10,6 @@
 [submodule "OpenGL/vendor/imgui"]
 	path = OpenGL/vendor/imgui
 	url = https://github.com/scooper/imgui.git
+[submodule "OpenGL/vendor/assimp"]
+	path = OpenGL/vendor/assimp
+	url = https://github.com/scooper/assimp.git

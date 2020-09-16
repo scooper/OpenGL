@@ -4,6 +4,18 @@
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Layers">
+      <UniqueIdentifier>{4C4DA51D-3805-E76A-A10C-C0C68DE3815B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Layers\Implementation">
+      <UniqueIdentifier>{4171046C-AD33-38F6-F6E3-C68262E510D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Util">
+      <UniqueIdentifier>{9AC626CF-8693-81DA-AFAC-6F829BD8B668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Util\Camera">
+      <UniqueIdentifier>{D2A9F957-3E35-671C-4746-EA10B350C31C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
@@ -36,6 +48,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Layers\Implementation\GettingStartedLayer.h">
+      <Filter>src\Layers\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\Implementation\LightingTutorialLayer.h">
+      <Filter>src\Layers\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\Implementation\TestLayer.h">
+      <Filter>src\Layers\Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\Layer.h">
+      <Filter>src\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layers\Layers.h">
+      <Filter>src\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\Camera\FlyCamera.h">
+      <Filter>src\Util\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\ErrorHandling.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\Logger.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\Shader.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\Texture.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
     <ClInclude Include="vendor\glm\glm\common.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
@@ -1269,36 +1311,37 @@
     <ClInclude Include="vendor\stbimage\stb_image.h">
       <Filter>vendor\stbimage</Filter>
     </ClInclude>
-    <ClInclude Include="src\Util\Shader.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\ErrorHandling.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\Logger.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\Texture.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Layers\Implementation\TestLayer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Layers\Implementation\GettingStartedLayer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Layers\Layer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Layers\Layers.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\Camera\FlyCamera.h" />
-    <ClInclude Include="src\Layers\Implementation\LightingTutorialLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\Implementation\GettingStartedLayer.cpp">
+      <Filter>src\Layers\Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\Implementation\LightingTutorialLayer.cpp">
+      <Filter>src\Layers\Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\Implementation\TestLayer.cpp">
+      <Filter>src\Layers\Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\Layers.cpp">
+      <Filter>src\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util\Camera\FlyCamera.cpp">
+      <Filter>src\Util\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util\ErrorHandling.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util\Logger.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util\Shader.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util\Texture.cpp">
+      <Filter>src\Util</Filter>
     </ClCompile>
     <ClCompile Include="vendor\imgui\examples\imgui_impl_glfw.cpp">
       <Filter>vendor\imgui\examples</Filter>
@@ -1309,40 +1352,5 @@
     <ClCompile Include="vendor\stbimage\stb_image.cpp">
       <Filter>vendor\stbimage</Filter>
     </ClCompile>
-    <ClCompile Include="src\Util\Shader.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Util\Logger.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Util\ErrorHandling.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Util\Texture.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Layers\Implementation\GettingStartedLayer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Layers\Layers.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Layers\Implementation\TestLayer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Util\Camera\FlyCamera.cpp" />
-    <ClCompile Include="src\Layers\Implementation\LightingTutorialLayer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\GettingStarted\VertexShader.glsl" />
-    <None Include="res\GettingStarted\FragmentShader.glsl" />
-    <None Include="res\LightingTutorial\FragmentShader.glsl" />
-    <None Include="res\LightingTutorial\VertexShader.glsl" />
-    <None Include="res\LightingTutorial\LightSourceFragmentShader.glsl" />
-    <None Include="res\LightingTutorial\LightSourceVertexShader.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\GettingStarted\awesomeface.png" />
-    <Image Include="res\GettingStarted\wall.jpg" />
   </ItemGroup>
 </Project>

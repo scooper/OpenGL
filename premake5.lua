@@ -17,6 +17,7 @@ includes["ImGui"] = "OpenGL/vendor/imgui"
 includes["glm"]  = "OpenGL/vendor/glm"
 includes["spdlog"] = "OpenGL/vendor/spdlog/include"
 includes["stbimage"] = "OpenGL/vendor/stbimage"
+includes["assimp"] = "OpenGL/vendor/assimp/include"
 
 -- all dependencies go between the group labels below
 group "Dependencies"
@@ -57,7 +58,8 @@ group ""
 			"%{includes.ImGui}",
 			"%{includes.glm}",
 			"%{includes.spdlog}",
-			"%{includes.stbimage}"
+			"%{includes.stbimage}",
+			"%{includes.assimp}"
 			
 		}
 
@@ -78,14 +80,27 @@ group ""
 				"WINDOWS",
 				"GLFW_INCLUDE_NONE"
 			}
+			
 
 		filter "configurations:Debug"
 			defines "_DEBUG"
 			symbols "On"
+			
+			links {
+				"OpenGL/vendor/assimp/lib/Debug/**.lib",
+				"OpenGL/vendor/assimp/contrib/zlib/Debug/**.lib",
+				"OpenGL/vendor/assimp/contrib/irrXML/Debug/**.lib"
+			}
 
 		filter "configurations:Release"
 			defines "_RELEASE"
 			optimize "On"
+			
+			links {
+				"OpenGL/vendor/assimp/lib/Release/**.lib",
+				"OpenGL/vendor/assimp/contrib/zlib/Release/**.lib",
+				"OpenGL/vendor/assimp/contrib/irrXML/Release/**.lib"
+			}
 
 		filter "configurations:Dist"
 			defines "_DIST"

@@ -59,7 +59,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WINDOWS;GLFW_INCLUDE_NONE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\spdlog\include;vendor\stbimage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\spdlog\include;vendor\stbimage;vendor\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -68,7 +68,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;vendor\assimp\lib\Debug\**.lib;vendor\assimp\contrib\zlib\Debug\**.lib;vendor\assimp\contrib\irrXML\Debug\**.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -76,7 +76,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WINDOWS;GLFW_INCLUDE_NONE;_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\spdlog\include;vendor\stbimage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\spdlog\include;vendor\stbimage;vendor\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -89,17 +89,17 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;vendor\assimp\lib\Release\**.lib;vendor\assimp\contrib\zlib\Release\**.lib;vendor\assimp\contrib\irrXML\Release\**.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Layers\Implementation\LightingTutorialLayer.h" />
-    <ClInclude Include="src\Util\Camera\FlyCamera.h" />
-    <ClInclude Include="src\Util\ErrorHandling.h" />
     <ClInclude Include="src\Layers\Implementation\GettingStartedLayer.h" />
+    <ClInclude Include="src\Layers\Implementation\LightingTutorialLayer.h" />
+    <ClInclude Include="src\Layers\Implementation\TestLayer.h" />
     <ClInclude Include="src\Layers\Layer.h" />
     <ClInclude Include="src\Layers\Layers.h" />
-    <ClInclude Include="src\Layers\Implementation\TestLayer.h" />
+    <ClInclude Include="src\Util\Camera\FlyCamera.h" />
+    <ClInclude Include="src\Util\ErrorHandling.h" />
     <ClInclude Include="src\Util\Logger.h" />
     <ClInclude Include="src\Util\Shader.h" />
     <ClInclude Include="src\Util\Texture.h" />
@@ -517,12 +517,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Layers\Implementation\GettingStartedLayer.cpp" />
     <ClCompile Include="src\Layers\Implementation\LightingTutorialLayer.cpp" />
+    <ClCompile Include="src\Layers\Implementation\TestLayer.cpp" />
+    <ClCompile Include="src\Layers\Layers.cpp" />
     <ClCompile Include="src\Util\Camera\FlyCamera.cpp" />
     <ClCompile Include="src\Util\ErrorHandling.cpp" />
-    <ClCompile Include="src\Layers\Implementation\GettingStartedLayer.cpp" />
-    <ClCompile Include="src\Layers\Layers.cpp" />
-    <ClCompile Include="src\Layers\Implementation\TestLayer.cpp" />
     <ClCompile Include="src\Util\Logger.cpp" />
     <ClCompile Include="src\Util\Shader.cpp" />
     <ClCompile Include="src\Util\Texture.cpp" />
@@ -540,18 +540,6 @@
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\GettingStarted\FragmentShader.glsl" />
-    <None Include="res\GettingStarted\VertexShader.glsl" />
-    <None Include="res\LightingTutorial\FragmentShader.glsl" />
-    <None Include="res\LightingTutorial\LightSourceFragmentShader.glsl" />
-    <None Include="res\LightingTutorial\LightSourceVertexShader.glsl" />
-    <None Include="res\LightingTutorial\VertexShader.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\GettingStarted\awesomeface.png" />
-    <Image Include="res\GettingStarted\wall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
