@@ -75,8 +75,8 @@ void GettingStartedLayer::OnActivate()
     LOG_INFO(logss.str());
 
     m_Shader = new Shader("D:/Projects/OpenGL/OpenGL/res/GettingStarted/VertexShader.glsl", "D:/Projects/OpenGL/OpenGL/res/GettingStarted/FragmentShader.glsl");
-    m_Texture1 = new Texture(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/GettingStarted/wall.jpg", true, TexLocation::Location0);
-    m_Texture2 = new Texture(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/GettingStarted/awesomeface.png", true, TexLocation::Location1);
+    m_Texture1 = Texture::Create(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/GettingStarted/wall.jpg", true);
+    m_Texture2 = Texture::Create(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/GettingStarted/awesomeface.png", true);
 
     int width, height;
 
@@ -107,8 +107,6 @@ void GettingStartedLayer::OnDeactivate()
 {
     // free opengl resources - so other layers can use them
     delete m_Shader;
-    delete m_Texture1;
-    delete m_Texture2;
     glDeleteVertexArrays(1, &m_VAO);
 
     Shader::Reset();
@@ -129,16 +127,18 @@ void GettingStartedLayer::Update(float deltaTime)
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    m_Texture1->Bind();
-    m_Texture2->Bind();
+    Texture::Activate(0);
+    Texture::Bind(m_Texture1);
+    Texture::Activate(1);
+    Texture::Bind(m_Texture2);
 
     // use shader
     m_Shader->Use();
 
     glBindVertexArray(m_VAO);
 
-    m_Shader->SetUniform("texture1", (int)m_Texture1->m_Location);
-    m_Shader->SetUniform("texture2", (int)m_Texture2->m_Location);
+    m_Shader->SetUniform("texture1", 0);
+    m_Shader->SetUniform("texture2", 1);
     m_Shader->SetUniform("mixValue", 0.2f);
 
     // gen cubes

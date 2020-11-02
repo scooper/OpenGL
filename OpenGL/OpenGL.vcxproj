@@ -95,12 +95,15 @@
   <ItemGroup>
     <ClInclude Include="src\Layers\Implementation\GettingStartedLayer.h" />
     <ClInclude Include="src\Layers\Implementation\LightingTutorialLayer.h" />
+    <ClInclude Include="src\Layers\Implementation\ModelLoadingLayer.h" />
     <ClInclude Include="src\Layers\Implementation\TestLayer.h" />
     <ClInclude Include="src\Layers\Layer.h" />
     <ClInclude Include="src\Layers\Layers.h" />
     <ClInclude Include="src\Util\Camera\FlyCamera.h" />
     <ClInclude Include="src\Util\ErrorHandling.h" />
     <ClInclude Include="src\Util\Logger.h" />
+    <ClInclude Include="src\Util\Model\Mesh.h" />
+    <ClInclude Include="src\Util\Model\Model.h" />
     <ClInclude Include="src\Util\Shader.h" />
     <ClInclude Include="src\Util\Texture.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -519,11 +522,14 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Layers\Implementation\GettingStartedLayer.cpp" />
     <ClCompile Include="src\Layers\Implementation\LightingTutorialLayer.cpp" />
+    <ClCompile Include="src\Layers\Implementation\ModelLoadingLayer.cpp" />
     <ClCompile Include="src\Layers\Implementation\TestLayer.cpp" />
     <ClCompile Include="src\Layers\Layers.cpp" />
     <ClCompile Include="src\Util\Camera\FlyCamera.cpp" />
     <ClCompile Include="src\Util\ErrorHandling.cpp" />
     <ClCompile Include="src\Util\Logger.cpp" />
+    <ClCompile Include="src\Util\Model\Mesh.cpp" />
+    <ClCompile Include="src\Util\Model\Model.cpp" />
     <ClCompile Include="src\Util\Shader.cpp" />
     <ClCompile Include="src\Util\Texture.cpp" />
     <ClCompile Include="vendor\imgui\examples\imgui_impl_glfw.cpp" />
@@ -540,6 +546,10 @@
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\ModelLoading\fragment.shader" />
+    <None Include="res\ModelLoading\vertex.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

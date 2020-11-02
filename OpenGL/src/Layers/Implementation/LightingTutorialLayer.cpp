@@ -63,8 +63,8 @@ void LightingTutorialLayer::OnActivate()
     m_ObjectShader = new Shader("D:/Projects/OpenGL/OpenGL/res/LightingTutorial/VertexShader.glsl", "D:/Projects/OpenGL/OpenGL/res/LightingTutorial/FragmentShader.glsl");
     m_LightSourceShader = new Shader("D:/Projects/OpenGL/OpenGL/res/LightingTutorial/LightSourceVertexShader.glsl", "D:/Projects/OpenGL/OpenGL/res/LightingTutorial/LightSourceFragmentShader.glsl");
 
-    m_BoxDiffuse = new Texture(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/LightingTutorial/container-diffuse-map.png", true, TexLocation::Location0);
-    m_BoxSpecular = new Texture(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/LightingTutorial/container-specular-map.png", true, TexLocation::Location1);
+    m_BoxDiffuse = Texture::Create(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/LightingTutorial/container-diffuse-map.png", true);
+    m_BoxSpecular = Texture::Create(GL_TEXTURE_2D, "D:/Projects/OpenGL/OpenGL/res/LightingTutorial/container-specular-map.png", true, TextureType::Specular);
 
     int width, height;
 
@@ -102,8 +102,8 @@ void LightingTutorialLayer::OnActivate()
 
     m_ObjectShader->Use();
     // set material for cube
-    m_ObjectShader->SetUniform("material.Diffuse", (int)m_BoxDiffuse->m_Location);
-    m_ObjectShader->SetUniform("material.Specular", (int)m_BoxSpecular->m_Location);
+    m_ObjectShader->SetUniform("material.Diffuse", 0);
+    m_ObjectShader->SetUniform("material.Specular", 1);
     m_ObjectShader->SetUniform("material.Shininess", 31.0f);
 
    /* m_ObjectShader->SetUniform("light.Ambient", glm::vec3(0.2f, 0.2f, 0.2f));
@@ -122,10 +122,9 @@ void LightingTutorialLayer::OnActivate()
 
 void LightingTutorialLayer::OnDeactivate()
 {
-    delete m_BoxDiffuse;
-    delete m_BoxSpecular;
     delete m_ObjectShader;
     delete m_LightSourceShader;
+    delete m_Camera;
 
     Shader::Reset();
 
@@ -155,8 +154,10 @@ void LightingTutorialLayer::Update(float deltaTime)
     
 
     // bind textures
-    m_BoxDiffuse->Bind();
-    m_BoxSpecular->Bind();
+    Texture::Activate(0);
+    Texture::Bind(m_BoxDiffuse);
+    Texture::Activate(1);
+    Texture::Bind(m_BoxSpecular);
 
     // box shader
     m_ObjectShader->Use();

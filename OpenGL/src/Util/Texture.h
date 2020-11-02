@@ -3,31 +3,59 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <stb_image.h>
+#include <string>
+#include <vector>
+#include <unordered_map>
 
-enum TexLocation
+enum class TextureType
 {
-    Location0, Location1, Location2, Location3, Location4, Location5, Location6,
-    Location7, Location8, Location9, Location10, Location11, Location12, Location13,
-    Location14, Location15,
-    LocationMax = Location15
+    Specular,
+    Diffuse
 };
 
 class Texture
 {
+private:
+    Texture(GLenum target, const char* filepath, bool flip, TextureType type = TextureType::Diffuse);
 public:
     unsigned int m_Id;
     GLenum m_Target;
-    TexLocation m_Location;
-
-    Texture(GLenum target, const char* filename, bool flip, TexLocation location);
+    TextureType m_Type;
+    std::string m_Filename;
+    std::string m_Filepath;
+    
     ~Texture();
+    static Texture* Create(GLenum target, const char* filepath, bool flip, TextureType type = TextureType::Diffuse);
 
-    static void Bind(GLenum target, unsigned int texture, TexLocation location);
-    void Bind() { this->Activate(m_Location); this->Bind(m_Target, m_Id, m_Location); }
+    static void Bind(GLenum target, unsigned int texture);
+    static void Bind(Texture* texture) { Bind(texture->m_Target, texture->m_Id); }
 
     static void Unbind(GLenum target);
-    void Unbind() { this->Unbind(m_Target); }
 
-    static void Activate(TexLocation location);
+    static void Activate(int slot);
 };
+
+class TextureManager
+{
+private:
+    static TextureManager* m_Instance;
+
+    TextureManager() {}
+    ~TextureManager();
+    std::unordered_map<std::string, Texture*> m_LoadedTextures;
+
+public:
+    static TextureManager* Instance()
+    {
+        if(!m_Instance)
+            m_Instance = new TextureManager;
+        return m_Instance;
+    }
+
+    void AddTexture(Texture* tex) { TextureManager::Instance()->m_LoadedTextures[tex->m_Filepath] = tex; }
+    void RemoveTexture(std::string filename);
+    Texture* TextureManager::GetTexture(std::string filepath, TextureType type = TextureType::Diffuse);
+
+};
+
 
