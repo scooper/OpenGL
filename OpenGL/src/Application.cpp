@@ -20,6 +20,7 @@
 #include "Layers/Implementation/GettingStartedLayer.h"
 #include "Layers/Implementation/LightingTutorialLayer.h"
 #include "Layers/Implementation/ModelLoadingLayer.h"
+#include "Layers/Implementation/AdvancedLayer.h"
 
 // to keep track of frame time
 float deltaTime = 0.0f;	// Time between current frame and last frame
@@ -157,6 +158,7 @@ int main(void)
     layers.Add(new GettingStartedLayer(window));
     layers.Add(new LightingTutorialLayer(window));
     layers.Add(new ModelLoadingLayer(window));
+    layers.Add(new AdvancedLayer(window));
 
     //layers.SetActiveLayer(*layers.begin());
 

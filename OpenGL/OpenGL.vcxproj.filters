@@ -1314,6 +1314,7 @@
     <ClInclude Include="src\Util\Model\Mesh.h" />
     <ClInclude Include="src\Util\Model\Model.h" />
     <ClInclude Include="src\Layers\Implementation\ModelLoadingLayer.h" />
+    <ClInclude Include="src\Layers\Implementation\AdvancedLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -1358,9 +1359,14 @@
     <ClCompile Include="src\Util\Model\Mesh.cpp" />
     <ClCompile Include="src\Util\Model\Model.cpp" />
     <ClCompile Include="src\Layers\Implementation\ModelLoadingLayer.cpp" />
+    <ClCompile Include="src\Layers\Implementation\AdvancedLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\ModelLoading\vertex.shader" />
     <None Include="res\ModelLoading\fragment.shader" />
+    <None Include="res\Advanced\FramebufferShaders\framebuffer_vs.glsl" />
+    <None Include="res\Advanced\FramebufferShaders\framebuffer_fs.glsl" />
+    <None Include="res\Advanced\FramebufferShaders\screen_fs.glsl" />
+    <None Include="res\Advanced\FramebufferShaders\screen_vs.glsl" />
   </ItemGroup>
 </Project>

@@ -30,16 +30,13 @@ Texture::Texture(GLenum target, const char* filepath, bool flip, TextureType typ
     if (data)
     {
         std::string name(filepath);
-        
-        // is it a PNG, then alpha channel
-        if (name.find(".png") != std::string::npos)
-        {
-            glTexImage2D(target, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        }
-        else
-        {
-            glTexImage2D(target, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        }
+        unsigned int channel = GL_RGB;
+
+        if (channels == 4)
+            channel = GL_RGBA;
+
+        glTexImage2D(target, 0, GL_RGB, width, height, 0, channel, GL_UNSIGNED_BYTE, data);
+
         glGenerateMipmap(target);
         std::stringstream logss;
         logss << "Loaded texture (" << filepath << ")";

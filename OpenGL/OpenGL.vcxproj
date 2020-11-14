@@ -93,6 +93,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Layers\Implementation\AdvancedLayer.h" />
     <ClInclude Include="src\Layers\Implementation\GettingStartedLayer.h" />
     <ClInclude Include="src\Layers\Implementation\LightingTutorialLayer.h" />
     <ClInclude Include="src\Layers\Implementation\ModelLoadingLayer.h" />
@@ -520,6 +521,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Layers\Implementation\AdvancedLayer.cpp" />
     <ClCompile Include="src\Layers\Implementation\GettingStartedLayer.cpp" />
     <ClCompile Include="src\Layers\Implementation\LightingTutorialLayer.cpp" />
     <ClCompile Include="src\Layers\Implementation\ModelLoadingLayer.cpp" />
@@ -548,6 +550,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\Advanced\FramebufferShaders\framebuffer_fs.glsl" />
+    <None Include="res\Advanced\FramebufferShaders\framebuffer_vs.glsl" />
+    <None Include="res\Advanced\FramebufferShaders\screen_fs.glsl" />
+    <None Include="res\Advanced\FramebufferShaders\screen_vs.glsl" />
     <None Include="res\ModelLoading\fragment.shader" />
     <None Include="res\ModelLoading\vertex.shader" />
   </ItemGroup>
