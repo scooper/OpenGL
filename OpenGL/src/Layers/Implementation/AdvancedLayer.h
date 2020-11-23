@@ -39,6 +39,30 @@ private:
 
     FlyCamera* m_Camera;
 
+    // identity kernel
+    std::vector<float> m_Kernel =
+    {
+        0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f
+    };
+
+    const std::vector<float> Kernel_Edge =
+    {
+        1.0f, 1.0f, 1.0f,
+        1.0f, -9.0f, 1.0f,
+        1.0f, 1.0f, 1.0f
+    };
+
+    const std::vector<float> Kernel_Blur =
+    {
+        1.0f / 16, 2.0f / 16, 1.0f / 16,
+        2.0f / 16, 4.0f / 16, 2.0f / 16,
+        1.0f / 16, 2.0f / 16, 1.0f / 16
+    };
+
+    bool m_Greyscale = false;
+
     static float m_CubeVertices[];
     static float m_QuadVertices[];
 };

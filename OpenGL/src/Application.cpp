@@ -184,8 +184,9 @@ int main(void)
             activeLayer->Update(deltaTime);
             ImGui::Begin(activeLayer->m_LayerName.c_str());
             activeLayer->ImGuiDisplay();
-            //test
-            //          
+            //
+            // Show Back button on every 'page'
+            ImGui::Separator();
             if (ImGui::Button("Back To Menu"))
                 layers.SetActiveLayer(nullptr);
             ImGui::End();

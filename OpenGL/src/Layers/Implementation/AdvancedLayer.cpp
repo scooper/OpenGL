@@ -1,5 +1,7 @@
 #include "AdvancedLayer.h"
 #include "Util/Logger.h"
+#include <string>
+#include <imgui.h>
 
 float AdvancedLayer::m_CubeVertices[] = {
     // positions          // texture coords
@@ -216,8 +218,6 @@ void AdvancedLayer::Update(float deltaTime)
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-
     m_FrameShader->Use();
     Texture::Activate(0);
 
@@ -238,6 +238,14 @@ void AdvancedLayer::Update(float deltaTime)
     glClear(GL_COLOR_BUFFER_BIT);
 
     m_ScreenShader->Use();
+    for(int i = 0; i < 9; i++)
+    {
+        auto index = std::to_string(i);
+        m_ScreenShader->SetUniform("kernel[" + index + "]", m_Kernel[i]);
+    };
+
+    m_ScreenShader->SetUniform("greyscale", m_Greyscale);
+
     glBindVertexArray(m_QuadVAO);
     glBindTexture(GL_TEXTURE_2D, m_texColourBufferRBO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -245,4 +253,35 @@ void AdvancedLayer::Update(float deltaTime)
 
 void AdvancedLayer::ImGuiDisplay()
 {
+    // maybe this helps
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    ImGui::Text("Kernel Array");
+    ImGui::Columns(3, NULL);
+    // TODO: imgui is fucking up here for some reason
+    ImGui::Separator();
+    float* ptr = &m_Kernel[0];
+    for (int i = 0; i < m_Kernel.size(); i++)
+    {
+        if (/*(i % 3 == 0) &&*/ i != 0)
+            ImGui::NextColumn();
+        ImGui::InputFloat(("i=" + std::to_string(i)).c_str(), ptr, 0.1f, 0.5f, "%.1f");
+        //ImGui::SliderFloat(std::to_string(i).c_str(), ptr, -20.0f, 20.0f, "%.1f");
+        //ImGui::Input
+        ptr++;
+    }
+
+    ImGui::Separator();
+    ImGui::Columns(1);
+    ImGui::Text("Preset Kernels");
+    ImGui::NewLine();
+    ImGui::SameLine();
+    if (ImGui::Button("Edge Kernel"))
+        m_Kernel = Kernel_Edge;
+    ImGui::SameLine();
+    if (ImGui::Button("Blur Kernel"))
+        m_Kernel = Kernel_Blur;
+
+    ImGui::Separator();
+    ImGui::Text("Options");
+    ImGui::Checkbox("Greyscale", &m_Greyscale);
 }
