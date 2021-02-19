@@ -253,20 +253,19 @@ void AdvancedLayer::Update(float deltaTime)
 
 void AdvancedLayer::ImGuiDisplay()
 {
-    // maybe this helps
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     ImGui::Text("Kernel Array");
     ImGui::Columns(3, NULL);
-    // TODO: imgui is fucking up here for some reason
+
     ImGui::Separator();
+    // kernel controls
     float* ptr = &m_Kernel[0];
     for (int i = 0; i < m_Kernel.size(); i++)
     {
-        if (/*(i % 3 == 0) &&*/ i != 0)
+        // we want the kernel to be displayed from left to right
+        if (i != 0)
             ImGui::NextColumn();
         ImGui::InputFloat(("i=" + std::to_string(i)).c_str(), ptr, 0.1f, 0.5f, "%.1f");
-        //ImGui::SliderFloat(std::to_string(i).c_str(), ptr, -20.0f, 20.0f, "%.1f");
-        //ImGui::Input
         ptr++;
     }
 
@@ -275,6 +274,7 @@ void AdvancedLayer::ImGuiDisplay()
     ImGui::Text("Preset Kernels");
     ImGui::NewLine();
     ImGui::SameLine();
+    // buttons to load a preset kernel that demonstrates some concept
     if (ImGui::Button("Edge Kernel"))
         m_Kernel = Kernel_Edge;
     ImGui::SameLine();
